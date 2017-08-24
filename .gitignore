@@ -1,0 +1,9 @@
+.idea
+composer.phar
+composer.lock
+clover.xml
+coveralls-upload.json
+phpunit.xml
+vendor/
+.vagrant
+html
