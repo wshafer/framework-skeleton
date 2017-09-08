@@ -17,7 +17,7 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace App\Service;
+namespace Cache\Service;
 
 use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Cache\CacheProvider;

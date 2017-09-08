@@ -1,58 +1,23 @@
 <?php
 
 return [
-    'dependencies' => [
-        'factories' => [
-            'doctrine.entity_manager.orm_default' => [ContainerInteropDoctrine\EntityManagerFactory::class, 'orm_default'],
-            'doctrine.event_subscriber.prefix.orm_default' => [App\EventListener\DoctrineEventSubscriberFactory::class, 'orm_default'],
-            'doctrine.cache.orm_default' =>  \App\Service\ZendStorageCacheFactory::class,
-        ],
-    ],
-
     'doctrine' => [
         'configuration' => [
-            'orm_default' => [
-                'result_cache' => 'orm_default',
-                'metadata_cache' => 'orm_default',
-                'query_cache' => 'orm_default',
-                'hydration_cache' => 'orm_default',
-                'auto_generate_proxy_classes' => true,
-                'proxy_dir' => 'data/proxies',
-                'proxy_namespace' => 'DoctrineEntityProxy',
-                'second_level_cache' => [
-                    'enabled' => false,
-                    'default_lifetime' => 3600,
-                    'default_lock_lifetime' => 60,
-                    'file_lock_region_directory' => '',
-                    'regions' => [],
-                ],
-                'sql_logger' => null,
-            ]
+            'orm_default' => []
         ],
+
         'connection' => [
-            'orm_default' => [
-                'params' => [
-                    'url' => 'mysql://root:root@localhost/local',
-                ],
-            ],
+            'orm_default' => [],
         ],
 
         'event_manager' => [
             'orm_default' => [
-                'subscribers' => [
-                    'doctrine.event_subscriber.prefix.orm_default' => 'doctrine.event_subscriber.prefix.orm_default',
-                    Gedmo\Timestampable\TimestampableListener::class => Gedmo\Timestampable\TimestampableListener::class,
-                ],
+                'subscribers' => [],
             ],
         ],
 
         'driver' => [
-            'orm_default' => [
-                'class'     => \Doctrine\ORM\Mapping\Driver\AnnotationDriver::class,
-                'cache'     => 'orm_default',
-                'paths'     => [__DIR__ . '/../../src/App/src/Entity'],
-                'db_prefix' => 'default_'
-            ],
+            'orm_default' => [],
         ],
     ],
 ];

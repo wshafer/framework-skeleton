@@ -26,5 +26,12 @@
  * );
  */
 
-$app->get('/', App\Action\HomePageAction::class, 'home');
+$app->get(
+    '/',
+    [
+        Auth\Action\Auth::class,
+        App\Action\HomePageAction::class,
+    ],
+    'home'
+);
 $app->get('/api/ping', App\Action\PingAction::class, 'api.ping');

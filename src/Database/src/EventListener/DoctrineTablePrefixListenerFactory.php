@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 
-namespace App\EventListener;
+namespace Database\EventListener;
 
 use ContainerInteropDoctrine\AbstractFactory;
 use Psr\Container\ContainerInterface;
 
-class DoctrineEventSubscriberFactory extends AbstractFactory
+class DoctrineTablePrefixListenerFactory extends AbstractFactory
 {
     protected function createWithConfig(ContainerInterface $container, $configKey)
     {
@@ -16,7 +17,7 @@ class DoctrineEventSubscriberFactory extends AbstractFactory
             $prefix = $config['doctrine']['driver'][$configKey]['db_prefix'];
         }
 
-        return new DoctrineEventSubscriber($prefix);
+        return new DoctrineTablePrefixListener($prefix);
     }
 
     /**

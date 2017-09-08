@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service;
+namespace Cache\Service;
 
 use Psr\Container\ContainerInterface;
 

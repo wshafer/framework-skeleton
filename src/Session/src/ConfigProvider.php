@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace App;
+namespace Session;
 
 /**
- * The configuration provider for the App module
+ * The configuration provider for the Session module
  *
  * @see https://docs.zendframework.com/zend-component-installer/
  */

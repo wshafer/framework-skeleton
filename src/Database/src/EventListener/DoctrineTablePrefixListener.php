@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 
-namespace App\EventListener;
+namespace Database\EventListener;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 
-class DoctrineEventSubscriber implements EventSubscriber
+class DoctrineTablePrefixListener implements EventSubscriber
 {
     protected $configKey;
 
@@ -31,7 +32,9 @@ class DoctrineEventSubscriber implements EventSubscriber
         if (!$classMetadata->isInheritanceTypeSingleTable()
             || $classMetadata->getName() === $classMetadata->rootEntityName
         ) {
-            $classMetadata->setTableName($this->prefix . $classMetadata->getTableName());
+            $classMetadata->setPrimaryTable([
+                'name' => $this->prefix . $classMetadata->getTableName()
+            ]);
         }
 
         foreach ($classMetadata->getAssociationMappings() as $fieldName => $mapping) {

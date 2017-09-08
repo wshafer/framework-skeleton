@@ -11,9 +11,16 @@ $cacheConfig = [
 ];
 
 $aggregator = new ConfigAggregator([
-    \Zend\Cache\ConfigProvider::class,
+    \Auth\ConfigProvider::class,
+    \Cache\ConfigProvider::class,
+    \Database\ConfigProvider::class,
+    \Session\ConfigProvider::class,
     \WShafer\PSR11FlySystem\ConfigProvider::class,
     \WShafer\PSR11MonoLog\ConfigProvider::class,
+    \Zend\Session\ConfigProvider::class,
+    \Zend\Cache\ConfigProvider::class,
+    \Zend\Session\ConfigProvider::class,
+
     // Include cache configuration
     new ArrayProvider($cacheConfig),
 

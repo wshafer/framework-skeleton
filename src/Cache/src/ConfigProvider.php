@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace App;
+namespace Cache;
 
 /**
- * The configuration provider for the App module
+ * The configuration provider for the Auth module
  *
  * @see https://docs.zendframework.com/zend-component-installer/
  */

@@ -1,7 +1,10 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Action;
 
+use Auth\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use Interop\Http\ServerMiddleware\DelegateInterface;
 use Interop\Http\ServerMiddleware\MiddlewareInterface as ServerMiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -36,6 +39,7 @@ class HomePageAction implements ServerMiddlewareInterface
 
         $data = [];
 
+        // @codeCoverageIgnoreStart
         if ($this->router instanceof Router\AuraRouter) {
             $data['routerName'] = 'Aura.Router';
             $data['routerDocs'] = 'http://auraphp.com/packages/2.x/Router.html';
@@ -57,6 +61,7 @@ class HomePageAction implements ServerMiddlewareInterface
             $data['templateName'] = 'Zend View';
             $data['templateDocs'] = 'https://docs.zendframework.com/zend-view/';
         }
+        // @codeCoverageIgnoreEnd
 
         return new HtmlResponse($this->template->render('app::home-page', $data));
     }
