@@ -29,7 +29,7 @@
 $app->get(
     '/',
     [
-        Auth\Action\Auth::class,
+        Auth\Action\RouteLock::class,
         App\Action\HomePageAction::class,
     ],
     'home'

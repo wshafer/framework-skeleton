@@ -10,7 +10,7 @@ use Zend\Authentication\AuthenticationService;
 use Zend\Expressive\Router\RouterInterface;
 use Zend\Expressive\Template\TemplateRendererInterface;
 
-class AuthFactory
+class RouteLockFactory
 {
     public function __invoke(ContainerInterface $container)
     {
@@ -20,6 +20,6 @@ class AuthFactory
         /** @var RouterInterface $router */
         $router = $container->get(RouterInterface::class);
 
-        return new Auth($authService, $router);
+        return new RouteLock($authService, $router);
     }
 }

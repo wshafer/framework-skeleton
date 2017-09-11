@@ -1,8 +1,8 @@
 <?php
 
-namespace AppTest\Entity;
+namespace DatabaseTest\Entity;
 
-use App\Entity\TimestampableTrait;
+use Database\Entity\TimestampableTrait;
 use PHPUnit\Framework\TestCase;
 
 class TimestampableTraitTest extends TestCase

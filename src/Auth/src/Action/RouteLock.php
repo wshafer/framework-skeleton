@@ -10,7 +10,7 @@ use Zend\Authentication\AuthenticationService;
 use Zend\Diactoros\Response\RedirectResponse;
 use Zend\Expressive\Router\RouterInterface;
 
-class Auth implements ServerMiddlewareInterface
+class RouteLock implements ServerMiddlewareInterface
 {
     protected $auth;
 

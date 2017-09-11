@@ -4,10 +4,9 @@ declare(strict_types=1);
 namespace Auth\Action;
 
 use Auth\Config\AuthConfig;
-use Auth\Exception\MissingConfigException;
 use Psr\Container\ContainerInterface;
 use Zend\Authentication\Adapter\AdapterInterface;
-use Zend\Authentication\AuthenticationService;
+use Zend\Authentication\AuthenticationServiceInterface;
 use Zend\Expressive\Router\RouterInterface;
 use Zend\Expressive\Template\TemplateRendererInterface;
 
@@ -23,8 +22,8 @@ class LoginFactory
         /** @var TemplateRendererInterface $renderer */
         $renderer = $container->get(TemplateRendererInterface::class);
 
-        /** @var AuthenticationService $authService */
-        $authService = $container->get(AuthenticationService::class);
+        /** @var AuthenticationServiceInterface $authService */
+        $authService = $container->get(AuthenticationServiceInterface::class);
 
         /** @var RouterInterface $router */
         $router = $container->get(RouterInterface::class);

@@ -8,7 +8,7 @@ use Interop\Http\ServerMiddleware\DelegateInterface;
 use Interop\Http\ServerMiddleware\MiddlewareInterface as ServerMiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Authentication\Adapter\AdapterInterface;
-use Zend\Authentication\AuthenticationService;
+use Zend\Authentication\AuthenticationServiceInterface;
 use Zend\Diactoros\Response\HtmlResponse;
 use Zend\Diactoros\Response\RedirectResponse;
 use Zend\Expressive\Router\RouterInterface;
@@ -24,7 +24,7 @@ class Login implements ServerMiddlewareInterface
 
     public function __construct(
         TemplateRendererInterface $template,
-        AuthenticationService $auth,
+        AuthenticationServiceInterface $auth,
         AdapterInterface $authAdapter,
         RouterInterface $router,
         $redirect = null
@@ -49,7 +49,7 @@ class Login implements ServerMiddlewareInterface
         return new HtmlResponse($this->template->render('auth::login'));
     }
 
-    public function authenticate(ServerRequestInterface $request)
+    protected function authenticate(ServerRequestInterface $request)
     {
         $params = $request->getParsedBody();
 

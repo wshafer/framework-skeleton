@@ -48,7 +48,11 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "AppTest\\": "test/AppTest/"
+            "AppTest\\": "test/AppTest/",
+            "AuthTest\\": "test/AuthTest/",
+            "CacheTest\\": "test/CacheTest/",
+            "DatabaseTest\\": "test/DatabaseTest/",
+            "SessionTest\\": "test/SessionTest/"
         }
     },
     "scripts": {
