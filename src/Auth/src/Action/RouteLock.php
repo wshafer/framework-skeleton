@@ -6,7 +6,7 @@ namespace Auth\Action;
 use Interop\Http\ServerMiddleware\DelegateInterface;
 use Interop\Http\ServerMiddleware\MiddlewareInterface as ServerMiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Zend\Authentication\AuthenticationService;
+use Zend\Authentication\AuthenticationServiceInterface;
 use Zend\Diactoros\Response\RedirectResponse;
 use Zend\Expressive\Router\RouterInterface;
 
@@ -17,7 +17,7 @@ class RouteLock implements ServerMiddlewareInterface
     protected $router;
 
     public function __construct(
-        AuthenticationService $auth,
+        AuthenticationServiceInterface $auth,
         RouterInterface $router
     ) {
         $this->auth = $auth;
@@ -31,6 +31,6 @@ class RouteLock implements ServerMiddlewareInterface
         }
 
         $identity = $this->auth->getIdentity();
-        return $delegate->process($request->withAttribute(self::class, $identity));
+        return $delegate->process($request->withAttribute('identity', $identity));
     }
 }
