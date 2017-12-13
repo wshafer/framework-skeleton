@@ -9,23 +9,100 @@ if ! grep -q "ubuntu-xenial" /etc/hosts; then
     echo "127.1.0.1 ubuntu-xenial" >> /etc/hosts;
 fi
 
-# Install dependencies
-add-apt-repository ppa:ondrej/php;
-apt-get update;
+# Update Apt
+DEBIAN_FRONTEND=noninteractive apt-get update;
+DEBIAN_FRONTEND=noninteractive apt-get install -y software-properties-common python-software-properties;
+DEBIAN_FRONTEND=noninteractive apt-get install -y language-pack-en-base;
+
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password root';
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root';
-apt-get install -y apache2 git curl php7.1 php7.1-bcmath php7.1-bz2 php7.1-cli php7.1-curl php7.1-intl \
-php7.1-json php7.1-mbstring php7.1-opcache php7.1-soap php7.1-sqlite3 php7.1-xml php7.1-xsl php7.1-zip \
-libapache2-mod-php7.1 php-xdebug php7.1-mysql mysql-server mysql-client;
+
+
+# Install Core packages
+DEBIAN_FRONTEND=noninteractive apt-get update
+DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    bash-completion \
+    apt-transport-https \
+    build-essential \
+    ca-certificates \
+    mysql-server \
+    curl \
+    git \
+    libssl-dev \
+    python \
+    rsync \
+    wget \
+    nginx \
+    libaio1 \
+    re2c \
+    librabbitmq-dev \
+    libssh2-1-dev \
+    libmcrypt-dev \
+    librabbitmq-dev \
+    libsodium-dev;
+
+# Install PHP Core and Modules
+DEBIAN_FRONTEND=noninteractive LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php 2>&1
+DEBIAN_FRONTEND=noninteractive apt-get update
+DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    php7.2-fpm \
+    php7.2-cli \
+    php7.2-dev \
+    php-pear \
+    php-memcached \
+    php7.2-odbc \
+    php-redis \
+    php7.2-snmp \
+    php7.2-tidy \
+    php7.2-xmlrpc \
+    php7.2-bcmath \
+    php7.2-bz2 \
+    php7.2-curl \
+    php7.2-intl \
+    php7.2-json \
+    php7.2-mbstring \
+    php7.2-opcache \
+    php7.2-soap \
+    php7.2-sqlite3 \
+    php7.2-xml \
+    php7.2-xsl \
+    php7.2-zip \
+    php7.2-dba \
+    php7.2-gmp \
+    php7.2-ldap \
+    php7.2-mysql \
+    php7.2-pgsql \
+    php7.2-snmp;
+
+pecl update-channels
+pecl install amqp
+pecl install ssh2-1.1.2
+pecl install mcrypt-1.0.1
+
+echo "extension=amqp.so" > /etc/php/7.2/mods-available/amqp.ini
+echo "extension=ssh2.so" > /etc/php/7.2/mods-available/ssh2.ini
+echo "extension=mcrypt.so" > /etc/php/7.2/mods-available/mcrypt.ini
+
+phpenmod amqp
+phpenmod ssh2
+phpenmod mcrypt
 
 # Prep Environment
 chmod -R 777 /var/www/data;
-sed -i 's/APACHE_RUN_USER=www-data/APACHE_RUN_USER=ubuntu/g' /etc/apache2/envvars;
-sed -i 's/APACHE_RUN_GROUP=www-data/APACHE_RUN_GROUP=ubuntu/g' /etc/apache2/envvars;
-sed -i 's/display_errors = Off/display_errors = On/g' /etc/php/7.1/apache2/php.ini;
+sed -i 's/www-data/vagrant/g' /etc/nginx/nginx.conf;
+sed -i 's/www-data/vagrant/g' /etc/php/7.2/fpm/pool.d/www.conf;
+sed -i 's/display_errors = Off/display_errors = On/g' /etc/php/7.2/fpm/php.ini;
+sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mysql/mysql.conf.d/mysqld.cnf
 
-# Configure Xdebug
+# Install and Configure Xdebug
+git clone https://github.com/xdebug/xdebug.git
+cd xdebug
+./rebuild.sh
+cd ..
+rm -Rf xdebug
+
 echo "
+zend_extension=xdebug.so
 xdebug.remote_enable = on
 xdebug.remote_connect_back = 1
 
@@ -43,7 +120,9 @@ xdebug.remote_connect_back = 1
 
 ;xdebug.var_display_max_depth = -1
 ;xdebug.var_display_max_children = -1
-;xdebug.var_display_max_data = -1" >> /etc/php/7.1/mods-available/xdebug.ini
+;xdebug.var_display_max_data = -1" >> /etc/php/7.2/mods-available/xdebug.ini
+
+phpenmod xdebug
 
 # Configure Opcache for production "like" settings
 echo "
@@ -53,7 +132,7 @@ opcache.max_accelerated_files=4000
 opcache.revalidate_freq=60
 opcache.fast_shutdown=1
 opcache.enable_cli=1
-" >> /etc/php/7.1/mods-available/opcache.ini
+" >> /etc/php/7.2/mods-available/opcache.ini
 
 # Now lets turn off opcache for development
 phpdismod opcache;
@@ -61,25 +140,47 @@ phpdismod opcache;
 # Create a default db to work with
 echo "CREATE DATABASE local DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;" | mysql -u root -proot
 
-# Configure Apache
-echo "<VirtualHost *:80>
-	DocumentRoot /var/www/public
-	AllowEncodedSlashes On
+# Create remote root user to work with
+echo "CREATE USER 'vagrant'@'%' IDENTIFIED BY 'vagrant';" | mysql -u root -proot
+echo "GRANT ALL PRIVILEGES ON *.* TO 'vagrant'@'%' WITH GRANT OPTION;" | mysql -u root -proot
 
-	<Directory /var/www/public>
-		Options +Indexes +FollowSymLinks
-		DirectoryIndex index.php index.html
-		Order allow,deny
-		Allow from all
-		AllowOverride All
-	</Directory>
+# Configure Nginx
+cat > /etc/nginx/sites-available/default << 'EOL'
+server {
+      	listen 80 default_server;
+      	listen [::]:80 default_server;
 
-	ErrorLog ${APACHE_LOG_DIR}/error.log
-	CustomLog ${APACHE_LOG_DIR}/access.log combined
-</VirtualHost>" > /etc/apache2/sites-available/000-default.conf;
-a2enmod rewrite;
-service apache2 restart;
+      	root /var/www/public;
 
+      	# Add index.php to the list if you are using PHP
+      	index index.php index.html index.htm index.nginx-debian.html;
+
+      	server_name _;
+
+      	location / {
+      		try_files $uri $uri/ /index.php$is_args$args;
+      	}
+
+      	location ~ \.php$ {
+      		include snippets/fastcgi-php.conf;
+      		fastcgi_pass unix:/run/php/php7.2-fpm.sock;
+      		fastcgi_param  SCRIPT_FILENAME $document_root$fastcgi_script_name;
+      	}
+
+      	location ~ /\.ht {
+      		deny all;
+      	}
+      }
+EOL
+
+
+# Restart services
+service nginx restart;
+service php7.2-fpm restart;
+service mysql restart;
+
+
+# Install Composer
 if [ -e /usr/local/bin/composer ]; then
     /usr/local/bin/composer self-update;
 else
@@ -87,8 +188,8 @@ else
 fi
 
 # Reset home directory of vagrant user
-if ! grep -q "cd /var/www" /home/ubuntu/.profile; then
-    echo "cd /var/www" >> /home/ubuntu/.profile;
+if ! grep -q "cd /var/www" /home/vagrant/.profile; then
+    echo "cd /var/www" >> /home/vagrant/.profile;
 fi
 
 echo "** [ZF] Run the following command to install dependencies, if you have not already:"
@@ -97,9 +198,9 @@ echo "** [ZF] Visit http://localhost:8080 in your browser for to view the applic
 SCRIPT
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box = 'ubuntu/xenial64'
+  config.vm.box = 'bento/ubuntu-16.04'
   config.vm.network "forwarded_port", guest: 80, host: 8080
-  config.vm.network "forwarded_port", guest: 3306, host: 33306
+  config.vm.network "forwarded_port", guest: 3306, host: 3306
   config.vm.network "private_network", type: "dhcp"
   config.vm.synced_folder '.', '/var/www'
   config.vm.provision 'shell', inline: @script
