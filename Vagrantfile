@@ -24,21 +24,10 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y \
     bash-completion \
     apt-transport-https \
     build-essential \
-    ca-certificates \
     mysql-server \
     curl \
-    git \
-    libssl-dev \
-    python \
-    rsync \
     wget \
     nginx \
-    libaio1 \
-    re2c \
-    librabbitmq-dev \
-    libssh2-1-dev \
-    libmcrypt-dev \
-    librabbitmq-dev \
     libsodium-dev;
 
 # Install PHP Core and Modules
@@ -50,7 +39,6 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y \
     php7.2-dev \
     php-pear \
     php-memcached \
-    php7.2-odbc \
     php-redis \
     php7.2-snmp \
     php7.2-tidy \
@@ -63,46 +51,22 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y \
     php7.2-mbstring \
     php7.2-opcache \
     php7.2-soap \
-    php7.2-sqlite3 \
     php7.2-xml \
-    php7.2-xsl \
     php7.2-zip \
-    php7.2-dba \
-    php7.2-gmp \
-    php7.2-ldap \
     php7.2-mysql \
-    php7.2-pgsql \
-    php7.2-snmp;
-
-pecl update-channels
-pecl install amqp
-pecl install ssh2-1.1.2
-pecl install mcrypt-1.0.1
-
-echo "extension=amqp.so" > /etc/php/7.2/mods-available/amqp.ini
-echo "extension=ssh2.so" > /etc/php/7.2/mods-available/ssh2.ini
-echo "extension=mcrypt.so" > /etc/php/7.2/mods-available/mcrypt.ini
-
-phpenmod amqp
-phpenmod ssh2
-phpenmod mcrypt
+    php7.2-imap \
+    php7.2-snmp \
+    php-xdebug
 
 # Prep Environment
 chmod -R 777 /var/www/data;
 sed -i 's/www-data/vagrant/g' /etc/nginx/nginx.conf;
 sed -i 's/www-data/vagrant/g' /etc/php/7.2/fpm/pool.d/www.conf;
 sed -i 's/display_errors = Off/display_errors = On/g' /etc/php/7.2/fpm/php.ini;
+sed -i 's/error_reporting = E_ALL & ~E_DEPRECATED & ~E_STRICT/error_reporting = E_ALL/g' /etc/php/7.2/fpm/php.ini;
 sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mysql/mysql.conf.d/mysqld.cnf
 
-# Install and Configure Xdebug
-git clone https://github.com/xdebug/xdebug.git
-cd xdebug
-./rebuild.sh
-cd ..
-rm -Rf xdebug
-
 echo "
-zend_extension=xdebug.so
 xdebug.remote_enable = on
 xdebug.remote_connect_back = 1
 
@@ -147,30 +111,30 @@ echo "GRANT ALL PRIVILEGES ON *.* TO 'vagrant'@'%' WITH GRANT OPTION;" | mysql -
 # Configure Nginx
 cat > /etc/nginx/sites-available/default << 'EOL'
 server {
-      	listen 80 default_server;
-      	listen [::]:80 default_server;
+    listen 80 default_server;
+    listen [::]:80 default_server;
 
-      	root /var/www/public;
+    root /var/www/public;
 
-      	# Add index.php to the list if you are using PHP
-      	index index.php index.html index.htm index.nginx-debian.html;
+    # Add index.php to the list if you are using PHP
+    index index.php index.html index.htm index.nginx-debian.html;
 
-      	server_name _;
+    server_name _;
 
-      	location / {
-      		try_files $uri $uri/ /index.php$is_args$args;
-      	}
+    location / {
+        try_files $uri $uri/ /index.php$is_args$args;
+    }
 
-      	location ~ \.php$ {
-      		include snippets/fastcgi-php.conf;
-      		fastcgi_pass unix:/run/php/php7.2-fpm.sock;
-      		fastcgi_param  SCRIPT_FILENAME $document_root$fastcgi_script_name;
-      	}
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/run/php/php7.2-fpm.sock;
+        fastcgi_param  SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    }
 
-      	location ~ /\.ht {
-      		deny all;
-      	}
-      }
+    location ~ /\.ht {
+        deny all;
+    }
+}
 EOL
 
 
