@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Zend\ConfigAggregator\ArrayProvider;
 use Zend\ConfigAggregator\ConfigAggregator;
 use Zend\ConfigAggregator\PhpFileProvider;
@@ -7,25 +9,29 @@ use Zend\ConfigAggregator\PhpFileProvider;
 // To enable or disable caching, set the `ConfigAggregator::ENABLE_CACHE` boolean in
 // `config/autoload/local.php`.
 $cacheConfig = [
-    'config_cache_path' => 'data/config-cache.php',
+    'config_cache_path' => 'data/cache/config-cache.php',
 ];
 
 $aggregator = new ConfigAggregator([
-    \Auth\ConfigProvider::class,
-    \Cache\ConfigProvider::class,
-    \Database\ConfigProvider::class,
-    \Session\ConfigProvider::class,
-    \WShafer\PSR11FlySystem\ConfigProvider::class,
     \WShafer\PSR11MonoLog\ConfigProvider::class,
-    \Zend\Session\ConfigProvider::class,
-    \Zend\Cache\ConfigProvider::class,
-    \Zend\Session\ConfigProvider::class,
-
+    \WShafer\PSR11FlySystem\ConfigProvider::class,
+    \Zend\Expressive\Authentication\ConfigProvider::class,
+    \Zend\Expressive\Authentication\OAuth2\ConfigProvider::class,
+    \WShafer\Expressive\Symfony\Router\ConfigProvider::class,
+    \WShafer\SwooleExpressive\ConfigProvider::class,
+    \Zend\HttpHandlerRunner\ConfigProvider::class,
     // Include cache configuration
     new ArrayProvider($cacheConfig),
 
+    \Zend\Expressive\Helper\ConfigProvider::class,
+    \Zend\Expressive\ConfigProvider::class,
+    \Zend\Expressive\Router\ConfigProvider::class,
+
     // Default App module config
     App\ConfigProvider::class,
+    \Cache\ConfigProvider::class,
+    \Database\ConfigProvider::class,
+    \OAuth\ConfigProvider::class,
 
     // Load application config in a pre-defined order in such a way that local settings
     // overwrite global settings. (Loaded as first to last):
@@ -33,10 +39,10 @@ $aggregator = new ConfigAggregator([
     //   - `*.global.php`
     //   - `local.php`
     //   - `*.local.php`
-    new PhpFileProvider(__DIR__.'/autoload/{{,*.}global,{,*.}local}.php'),
+    new PhpFileProvider(realpath(__DIR__) . '/autoload/{{,*.}global,{,*.}local}.php'),
 
     // Load development config if it exists
-    new PhpFileProvider(__DIR__.'/development.config.php'),
+    new PhpFileProvider(realpath(__DIR__) . '/development.config.php'),
 ], $cacheConfig['config_cache_path']);
 
 return $aggregator->getMergedConfig();

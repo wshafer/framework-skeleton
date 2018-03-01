@@ -5,15 +5,7 @@ return [
         'factories' => [
             'doctrine.entity_manager.orm_default' => [ContainerInteropDoctrine\EntityManagerFactory::class, 'orm_default'],
             \Database\EventListener\DoctrineTablePrefixListener::class => [Database\EventListener\DoctrineTablePrefixListenerFactory::class, 'orm_default'],
-            'doctrine.cache.orm_default' =>  \Cache\Service\ZendStorageCacheFactory::class,
-        ],
-    ],
-
-    'caches' => [
-        'Cache\Doctrine' => [
-            'adapter' => [
-                'name' => \Zend\Cache\Storage\Adapter\Memory::class
-            ],
+            'doctrine.cache.orm_default' =>  \Cache\Service\DoctrineCacheFactory::class,
         ],
     ],
 
@@ -35,7 +27,7 @@ return [
                     'regions' => [],
                 ],
                 'sql_logger' => null,
-            ]
+            ],
         ],
 
         'connection' => [
