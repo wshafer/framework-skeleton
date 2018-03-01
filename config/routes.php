@@ -41,5 +41,10 @@ return function (Application $app, MiddlewareFactory $factory, ContainerInterfac
             App\Handler\PingHandler::class,
         ],
         'api.ping');
-    $app->route('/oauth', \Zend\Expressive\Authentication\OAuth2\OAuth2Middleware::class, 'oauth');
+    $app->route(
+        '/oauth',
+        \Zend\Expressive\Authentication\OAuth2\OAuth2Middleware::class,
+        ['POST', 'GET'],
+        'oauth'
+    );
 };
