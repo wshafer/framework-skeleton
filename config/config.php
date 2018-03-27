@@ -13,10 +13,10 @@ $cacheConfig = [
 ];
 
 $aggregator = new ConfigAggregator([
+    \Zend\Expressive\Router\FastRouteRouter\ConfigProvider::class,
     \WShafer\PSR11MonoLog\ConfigProvider::class,
     \WShafer\PSR11FlySystem\ConfigProvider::class,
     \Zend\Expressive\Authentication\ConfigProvider::class,
-    \Zend\Expressive\Authentication\OAuth2\ConfigProvider::class,
     \WShafer\Expressive\Symfony\Router\ConfigProvider::class,
     \WShafer\SwooleExpressive\ConfigProvider::class,
     \Zend\HttpHandlerRunner\ConfigProvider::class,

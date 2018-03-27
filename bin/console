@@ -17,7 +17,8 @@ $commands = $container->get('config')['console']['commands'];
 $em = $container->get('doctrine.entity_manager.orm_default');
 
 $helperSet = new \Symfony\Component\Console\Helper\HelperSet([
-        'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($em)
+    'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($em),
+    'question' => new \Symfony\Component\Console\Helper\QuestionHelper(),
 ]);
 
 $application->setHelperSet($helperSet);

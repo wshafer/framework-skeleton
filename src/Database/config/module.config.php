@@ -6,6 +6,8 @@ return [
             'doctrine.entity_manager.orm_default' => [ContainerInteropDoctrine\EntityManagerFactory::class, 'orm_default'],
             \Database\EventListener\DoctrineTablePrefixListener::class => [Database\EventListener\DoctrineTablePrefixListenerFactory::class, 'orm_default'],
             'doctrine.cache.orm_default' =>  \Cache\Service\DoctrineCacheFactory::class,
+            \Database\Repository\RepositoryFactoryDecorator::class
+                => \Database\Repository\RepositoryFactoryDecoratorFactory::class
         ],
     ],
 
@@ -19,6 +21,7 @@ return [
                 'auto_generate_proxy_classes' => true,
                 'proxy_dir' => 'data/proxies',
                 'proxy_namespace' => 'DoctrineEntityProxy',
+                'repository_factory' => \Database\Repository\RepositoryFactoryDecorator::class,
                 'second_level_cache' => [
                     'enabled' => false,
                     'default_lifetime' => 3600,
@@ -51,7 +54,7 @@ return [
             'orm_default' => [
                 'class'     => \Doctrine\ORM\Mapping\Driver\AnnotationDriver::class,
                 'cache'     => 'orm_default',
-                'db_prefix' => 'default_'
+                'db_prefix' => ''
             ],
         ],
     ],

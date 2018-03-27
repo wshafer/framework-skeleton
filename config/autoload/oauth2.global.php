@@ -10,17 +10,20 @@
  * @see http://php.net/manual/en/class.dateinterval.php
  */
 return [
-    'authentication' => [
-        'private_key' => __DIR__ . '/../data/private.key',
-        'public_key' => __DIR__ . '/../data/public.key',
-        'encryption_key' => 'bhT9/A3eB0b3HFIxEFK9pPOszfUiFhnJwPZkJpzdCl4=',
-        'access_token_expire' => 'P1D', // 1 day in DateInterval format
-        'refresh_token_expire' => 'P1M', // 1 month in DateInterval format
-        'auth_code_expire' => 'PT10M', // 10 minutes in DateInterval format
-        'pdo' => [
-            'dsn' => '',
-            'username' => '',
-            'password' => ''
-        ],
+    'oauth2' => [
+        'privateKeyPath'             => __DIR__ . '/../../data/private.key',
+        'publicKeyPath'              => __DIR__ . '/../../data/public.key',
+        'encryptionKeyPath'          => __DIR__ . '/../../data/encryption.key',
+        'accessTokenExpireInterval'  => 'P1D',   // 1 day in DateInterval format
+        'refreshTokenExpireInterval' => 'P1M',   // 1 month in DateInterval format
+        'authCodeExpireInterval'     => 'PT10M', // 10 minutes in DateInterval format
+        'grants' => [
+            // Grants list should be [identifierName] => serviceName
+            'authorization_code' => 'authorization_code',
+            'client_credentials' => 'client_credentials',
+            'implicit'           => 'implicit',
+            'password'           => 'password',
+            'refresh_token'      => 'refresh_token',
+        ]
     ],
 ];

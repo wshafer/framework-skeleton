@@ -41,6 +41,7 @@
         "php": "^7.1",
         "dasprid/container-interop-doctrine": "^1.1",
         "gedmo/doctrine-extensions": "^2.4",
+        "league/oauth2-server": "^7.0",
         "roave/security-advisories": "dev-master",
         "symfony/routing": "dev-master",
         "wshafer/expressive-symfony-router": "dev-master",
@@ -52,7 +53,6 @@
         "zendframework/zend-config-aggregator": "^1.0",
         "zendframework/zend-expressive": "^3.0.0rc1",
         "zendframework/zend-expressive-authentication": "dev-release-1.0.0",
-        "zendframework/zend-expressive-authentication-oauth2": "dev-release-1.0.0",
         "zendframework/zend-expressive-helpers": "^5.0.0alpha3",
         "zendframework/zend-servicemanager": "^3.3",
         "zendframework/zend-stdlib": "^3.1"

@@ -11,7 +11,7 @@ trait TimestampableTrait
      * @var \DateTime $created
      *
      * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true, options={"default" : NULL})
      */
     private $created;
 
@@ -19,7 +19,7 @@ trait TimestampableTrait
      * @var \DateTime $updated
      *
      * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true, options={"default" : NULL})
      */
     private $modified;
 

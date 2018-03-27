@@ -37,13 +37,13 @@ return function (Application $app, MiddlewareFactory $factory, ContainerInterfac
     $app->get(
         '/api/ping',
         [
-            \Zend\Expressive\Authentication\AuthenticationMiddleware::class,
+            \OAuth\Middleware\Authentication::class,
             App\Handler\PingHandler::class,
         ],
         'api.ping');
     $app->route(
         '/oauth',
-        \Zend\Expressive\Authentication\OAuth2\OAuth2Middleware::class,
+        \OAuth\Middleware\OAuth2::class,
         ['POST', 'GET'],
         'oauth'
     );
