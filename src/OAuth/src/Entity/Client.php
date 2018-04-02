@@ -62,6 +62,20 @@ class Client implements ClientEntityInterface
     protected $grants;
 
     /**
+     * @var AuthCode[]|ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="AuthCode", mappedBy="client")
+     */
+    protected $authCodes;
+
+    /**
+     * @var AccessToken[]|ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="AccessToken", mappedBy="client")
+     */
+    protected $accessTokens;
+
+    /**
      * @var ScopeEntityInterface[]|ArrayCollection
      *
      * @ORM\ManyToMany(targetEntity="Scope", inversedBy="clients")
@@ -74,6 +88,8 @@ class Client implements ClientEntityInterface
 
     public function __construct()
     {
+        $this->authCodes = new ArrayCollection();
+        $this->accessTokens = new ArrayCollection();
         $this->scopes = new ArrayCollection();
     }
 
@@ -139,6 +155,61 @@ class Client implements ClientEntityInterface
     public function setRedirectUrl(string $redirectUrl): void
     {
         $this->redirectUrl = $redirectUrl;
+    }
+
+    /**
+     * @return ArrayCollection|AuthCode[]
+     */
+    public function getAuthCodes()
+    {
+        return $this->authCodes;
+    }
+
+    /**
+     * @param ArrayCollection|AuthCode[] $authCodes
+     */
+    public function setAuthCodes($authCodes): void
+    {
+        $this->authCodes->clear();
+
+        foreach ($authCodes as $authCode) {
+            $this->addAuthCode($authCode);
+        }
+    }
+
+    public function addAuthCode(AuthCode $authCode)
+    {
+        $authCode->setClient($this);
+        $this->authCodes->add($authCode);
+    }
+
+    /**
+     * @return ArrayCollection|AccessToken[]
+     */
+    public function getAccessTokens()
+    {
+        return $this->accessTokens;
+    }
+
+    /**
+     * @param ArrayCollection|AccessToken[] $accessTokens
+     */
+    public function setAccessTokens($accessTokens): void
+    {
+        $this->accessTokens->clear();
+
+        foreach ($accessTokens as $accessToken) {
+            $this->addAccessToken($accessToken);
+        }
+    }
+
+    /**
+     * @param AccessToken $accessToken
+     */
+    public function addAccessToken(AccessToken $accessToken)
+    {
+        $accessToken->setClient($this);
+        $this->accessTokens->add($accessToken);
     }
 
     /**

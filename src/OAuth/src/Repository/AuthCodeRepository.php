@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace OAuth\Repository;
 
+use Authentication\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
 use OAuth\Entity\AuthCode;
-use OAuth\Entity\User;
 use OAuth\Exception\AuthCodeNotFoundException;
 
 class AuthCodeRepository extends EntityRepository implements AuthCodeRepositoryInterface

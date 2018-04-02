@@ -2,12 +2,15 @@
 
 declare(strict_types=1);
 
-namespace OAuth\Entity;
+namespace Authentication\Entity;
 
 use Database\Entity\TimestampableTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use League\OAuth2\Server\Entities\UserEntityInterface;
+use OAuth\Entity\AccessToken;
+use OAuth\Entity\AuthCode;
+use OAuth\Entity\Scope;
 
 /**
  * Scope
@@ -17,7 +20,7 @@ use League\OAuth2\Server\Entities\UserEntityInterface;
  *     indexes={@ORM\Index(name="idx1_users", columns={"email"})},
  *     uniqueConstraints={@ORM\UniqueConstraint(name="unique_user_email", columns={"email"})}
  * )
- * @ORM\Entity(repositoryClass="OAuth\Repository\UserRepository")
+ * @ORM\Entity(repositoryClass="Authentication\Repository\UserRepository")
  */
 class User implements UserEntityInterface
 {
@@ -49,7 +52,7 @@ class User implements UserEntityInterface
     /**
      * @var Scope[]|ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="Scope", inversedBy="users")
+     * @ORM\ManyToMany(targetEntity="\OAuth\Entity\Scope", inversedBy="users")
      * @ORM\JoinTable(name="user_scopes",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="cascade")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="scope_id", referencedColumnName="id", onDelete="cascade")},
@@ -60,14 +63,14 @@ class User implements UserEntityInterface
     /**
      * @var AccessToken
      *
-     * @ORM\OneToMany(targetEntity="AccessToken", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="\OAuth\Entity\AccessToken", mappedBy="user")
      */
     protected $accessTokens;
 
     /**
      * @var AuthCode
      *
-     * @ORM\OneToMany(targetEntity="AuthCode", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="\OAuth\Entity\AuthCode", mappedBy="user")
      */
     protected $authCode;
 

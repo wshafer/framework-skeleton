@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace OAuth\Command\User;
+namespace Authentication\Command\User;
 
+use Authentication\Entity\User;
+use Authentication\Repository\UserRepository;
 use Doctrine\ORM\EntityManager;
 use Interop\Container\ContainerInterface;
 use OAuth\Config\Config;
 use OAuth\Entity\Scope;
-use OAuth\Entity\User;
 use OAuth\Repository\ScopeRepository;
-use OAuth\Repository\UserRepository;
 
-class ScopesFactory
+class PasswordFactory
 {
     public function __invoke(ContainerInterface $container)
     {
@@ -28,6 +28,6 @@ class ScopesFactory
         /** @var Config $config */
         $config = $container->get(Config::class);
 
-        return new Scopes($entityManager, $userRepository, $scopeRepo, $config);
+        return new Password($entityManager, $userRepository, $scopeRepo, $config);
     }
 }

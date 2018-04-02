@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace OAuth\Command\User;
+namespace Authentication\Command\User;
 
+use Authentication\Repository\UserRepository;
 use Doctrine\ORM\EntityManager;
 use OAuth\Config\Config;
 use OAuth\Repository\ScopeRepository;
-use OAuth\Repository\UserRepository;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Password extends AbstractUserCommand
+class Delete extends AbstractUserCommand
 {
     protected $entityManager;
 
@@ -33,8 +33,8 @@ class Password extends AbstractUserCommand
     protected function configure()
     {
         $this
-            ->setName('oauth:user:password')
-            ->setDescription('Change user password')
+            ->setName('authentication:user:delete')
+            ->setDescription('Delete an existing user')
             ->addArgument(
                 'email',
                 InputArgument::REQUIRED,
@@ -48,9 +48,8 @@ class Password extends AbstractUserCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $user = $this->getUser($input);
-        $secret = $this->getSecret($input, $output, 'password');
-        $user->setPassword($secret);
-        $this->entityManager->flush($user);
+        $this->entityManager->remove($user);
+        $this->entityManager->flush();
         $output->writeln('Complete');
     }
 }

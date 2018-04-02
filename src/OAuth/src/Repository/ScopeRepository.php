@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace OAuth\Repository;
 
+use Authentication\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
 use OAuth\Entity\Client;
 use OAuth\Entity\Scope;
-use OAuth\Entity\User;
 use OAuth\Exception\ScopeExistsException;
 use OAuth\Exception\ScopeNotFoundException;
 

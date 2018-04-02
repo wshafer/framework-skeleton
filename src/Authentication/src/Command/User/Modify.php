@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace OAuth\Command\User;
+namespace Authentication\Command\User;
 
+use Authentication\Repository\UserRepository;
 use Doctrine\ORM\EntityManager;
 use OAuth\Config\Config;
 use OAuth\Exception\InvalidEmailAddress;
 use OAuth\Exception\UserExistsException;
 use OAuth\Exception\UserNotFoundException;
 use OAuth\Repository\ScopeRepository;
-use OAuth\Repository\UserRepository;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -36,7 +36,7 @@ class Modify extends AbstractUserCommand
     protected function configure()
     {
         $this
-            ->setName('oauth:user:modify')
+            ->setName('authentication:user:modify')
             ->setDescription('Modify an existing users email address')
             ->addArgument(
                 'email',

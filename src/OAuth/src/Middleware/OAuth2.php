@@ -6,21 +6,34 @@ namespace OAuth\Middleware;
 
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Exception\OAuthServerException;
+use OAuth\Config\Config;
+use OAuth\Exception\OAuthHttpProblem;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Zend\Expressive\Router\RouterInterface;
+use Zend\Expressive\Session\SessionInterface;
+use Zend\Expressive\Session\SessionMiddleware;
 
 class OAuth2 implements RequestHandlerInterface
 {
     protected $server;
 
+    protected $config;
+
+    protected $router;
+
     protected $responseFactory;
 
     public function __construct(
+        Config $config,
         AuthorizationServer $server,
+        RouterInterface $router,
         callable $responseFactory
     ) {
+        $this->config = $config;
         $this->server = $server;
+        $this->router = $router;
         $this->responseFactory = function () use ($responseFactory) : ResponseInterface {
             return $responseFactory();
         };
@@ -51,6 +64,7 @@ class OAuth2 implements RequestHandlerInterface
     protected function authorizationRequest(ServerRequestInterface $request) : ResponseInterface
     {
         // Create a new response for the request
+        /** @var ResponseInterface $response */
         $response = ($this->responseFactory)();
 
         try {
@@ -60,23 +74,18 @@ class OAuth2 implements RequestHandlerInterface
             // The auth request object can be serialized and saved into a user's session.
             // You will probably want to redirect the user at this point to a login endpoint.
 
-            // Once the user has logged in set the user on the AuthorizationRequest
-            $authRequest->setUser(new UserEntity('guest')); // an instance of UserEntityInterface
+            /** @var SessionInterface $session */
+            $session = $request->getAttribute(SessionMiddleware::SESSION_ATTRIBUTE);
+            $session->set('oauth_request', serialize($authRequest));
 
-            // At this point you should redirect the user to an authorization page.
-            // This form will ask the user to approve the client and the scopes requested.
+            return $response->withStatus('302')
+                ->withHeader(
+                    'Location',
+                    $this->router->generateUri($this->config->getAuthenticationRouteName())
+                );
 
-            // Once the user has approved or denied the client update the status
-            // (true = approved, false = denied)
-            $authRequest->setAuthorizationApproved(true);
-
-            // Return the HTTP redirect response
-            return $this->server->completeAuthorizationRequest($authRequest, $response);
         } catch (OAuthServerException $exception) {
-            return $exception->generateHttpResponse($response);
-        } catch (\Exception $exception) {
-            return (new OAuthServerException($exception->getMessage(), 0, 'unknown_error', 500))
-                ->generateHttpResponse($response);
+            throw OAuthHttpProblem::create($exception);
         }
     }
 
@@ -99,10 +108,7 @@ class OAuth2 implements RequestHandlerInterface
         try {
             return $this->server->respondToAccessTokenRequest($request, $response);
         } catch (OAuthServerException $exception) {
-            return $exception->generateHttpResponse($response);
-        } catch (\Exception $exception) {
-            return (new OAuthServerException($exception->getMessage(), 0, 'unknown_error', 500))
-                ->generateHttpResponse($response);
+            throw OAuthHttpProblem::create($exception);
         }
     }
 }

@@ -5,6 +5,7 @@ namespace OAuth\Middleware;
 
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\ResourceServer;
+use OAuth\Exception\OAuthHttpProblem;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -19,9 +20,6 @@ class Authentication implements MiddlewareInterface
 
     protected $responseFactory;
 
-    /**
-     * @param ResourceServer $server
-     */
     public function __construct(
         ResourceServer $server,
         callable $responseFactory
@@ -34,16 +32,10 @@ class Authentication implements MiddlewareInterface
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        // Create a new response for the request
-        $response = ($this->responseFactory)();
-
         try {
             $request = $this->server->validateAuthenticatedRequest($request);
         } catch (OAuthServerException $exception) {
-            return $exception->generateHttpResponse($response);
-        } catch (\Exception $exception) {
-            return (new OAuthServerException($exception->getMessage(), 0, 'unknown_error', 500))
-                ->generateHttpResponse($response);
+            throw OAuthHttpProblem::create($exception);
         }
 
         // Pass the request and response on to the next responder in the chain

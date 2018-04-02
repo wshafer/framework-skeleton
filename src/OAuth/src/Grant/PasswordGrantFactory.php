@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace OAuth\Grant;
 
+use Authentication\Entity\User;
+use Authentication\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use League\OAuth2\Server\Grant\PasswordGrant;
 use OAuth\Config\Config;
 use OAuth\Entity\RefreshToken;
-use OAuth\Entity\User;
 use OAuth\Repository\RefreshTokenRepository;
-use OAuth\Repository\UserRepository;
 use Psr\Container\ContainerInterface;
 
 class PasswordGrantFactory

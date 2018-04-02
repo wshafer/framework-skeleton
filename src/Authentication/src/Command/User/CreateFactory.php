@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace OAuth\Command\User;
+namespace Authentication\Command\User;
 
+use Authentication\Entity\User;
+use Authentication\Repository\UserRepository;
 use Doctrine\ORM\EntityManager;
 use OAuth\Config\Config;
 use OAuth\Entity\Scope;
-use OAuth\Entity\User;
 use OAuth\Repository\ScopeRepository;
-use OAuth\Repository\UserRepository;
 use Psr\Container\ContainerInterface;
 
 class CreateFactory

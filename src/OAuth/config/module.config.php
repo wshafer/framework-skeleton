@@ -8,7 +8,7 @@ return [
         'accessTokenExpireInterval'  => 'P1D',   // 1 day in DateInterval format
         'refreshTokenExpireInterval' => 'P1M',   // 1 month in DateInterval format
         'authCodeExpireInterval'     => 'PT10M', // 10 minutes in DateInterval format
-
+        'authenticationRouteName'     => 'auth',
         // Password Hash Params
         'passwordHash' => [
             'algorithm' => PASSWORD_DEFAULT,
@@ -72,17 +72,6 @@ return [
             \OAuth\Command\Client\Delete::class
                 => \OAuth\Command\Client\DeleteFactory::class,
 
-            \OAuth\Command\User\Create::class
-                => \OAuth\Command\User\CreateFactory::class,
-            \OAuth\Command\User\Scopes::class
-                => \OAuth\Command\User\ScopesFactory::class,
-            \OAuth\Command\User\Modify::class
-                => \OAuth\Command\User\ModifyFactory::class,
-            \OAuth\Command\User\Password::class
-                => \OAuth\Command\User\PasswordFactory::class,
-            \OAuth\Command\User\Delete::class
-                => \OAuth\Command\User\DeleteFactory::class,
-
             /* Grants */
             \League\OAuth2\Server\Grant\AuthCodeGrant::class
                 => \OAuth\Grant\AuthorizationCodeGrantFactory::class,
@@ -118,12 +107,6 @@ return [
             \OAuth\Command\Client\Scopes::class => \OAuth\Command\Client\Scopes::class,
             \OAuth\Command\Client\Secret::class => \OAuth\Command\Client\Secret::class,
             \OAuth\Command\Client\Delete::class => \OAuth\Command\Client\Delete::class,
-
-            \OAuth\Command\User\Create::class => \OAuth\Command\User\Create::class,
-            \OAuth\Command\User\Scopes::class => \OAuth\Command\User\Scopes::class,
-            \OAuth\Command\User\Modify::class => \OAuth\Command\User\Modify::class,
-            \OAuth\Command\User\Password::class => \OAuth\Command\User\Password::class,
-            \OAuth\Command\User\Delete::class => \OAuth\Command\User\Delete::class,
         ],
     ],
 ];

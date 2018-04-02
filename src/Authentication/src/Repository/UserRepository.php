@@ -2,16 +2,18 @@
 
 declare(strict_types=1);
 
-namespace OAuth\Repository;
+namespace Authentication\Repository;
 
+use Authentication\Entity\User;
 use Database\Repository\ContainerAwareInterface;
 use Doctrine\ORM\EntityRepository;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Repositories\UserRepositoryInterface;
 use OAuth\Entity\Scope;
-use OAuth\Entity\User;
 use OAuth\Exception\UserExistsException;
 use OAuth\Exception\UserNotFoundException;
+use OAuth\Repository\ConfigTrait;
+use OAuth\Repository\ScopeRepository;
 
 class UserRepository extends EntityRepository implements UserRepositoryInterface, ContainerAwareInterface
 {

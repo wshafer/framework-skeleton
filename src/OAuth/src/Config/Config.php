@@ -99,4 +99,13 @@ class Config
 
         return $this->config['grants'];
     }
+
+    public function getAuthenticationRouteName()
+    {
+        if (empty($this->config['authenticationRouteName'])) {
+            throw new InvalidConfigException('Unable to locate authenticationRouteName in config');
+        }
+
+        return $this->config['authenticationRouteName'];
+    }
 }

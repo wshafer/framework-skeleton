@@ -58,7 +58,7 @@ class RefreshToken implements RefreshTokenEntityInterface
     /**
      * @var AccessTokenEntityInterface
      *
-     * @ORM\ManyToOne(targetEntity="AccessToken", inversedBy="refreshToken")
+     * @ORM\OneToOne(targetEntity="AccessToken", inversedBy="refreshToken")
      * @ORM\JoinColumn(name="access_token_id", referencedColumnName="id", onDelete="cascade")
      */
     protected $accessToken;

@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace OAuth\Repository;
 
+use Authentication\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
-use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
 use OAuth\Entity\AccessToken;
-use OAuth\Entity\User;
 use OAuth\Exception\AccessTokenNotFoundException;
 
 class AccessTokenRepository extends EntityRepository implements AccessTokenRepositoryInterface
@@ -45,7 +44,9 @@ class AccessTokenRepository extends EntityRepository implements AccessTokenRepos
      */
     public function persistNewAccessToken(AccessTokenEntityInterface $accessTokenEntity)
     {
-        $existingToken = $this->findAccessTokenByToken($accessTokenEntity->getIdentifier());
+        try {
+            $existingToken = $this->findAccessTokenByToken($accessTokenEntity->getIdentifier());
+        } catch (AccessTokenNotFoundException $e) {}
 
         if (!empty($existingToken)) {
             throw UniqueTokenIdentifierConstraintViolationException::create();
@@ -84,12 +85,7 @@ class AccessTokenRepository extends EntityRepository implements AccessTokenRepos
 
     public function isAccessTokenRevoked($tokenId)
     {
-        try {
-            $accessToken = $this->findAccessTokenByToken($tokenId);
-        } catch (AccessTokenNotFoundException $e) {
-            throw OAuthServerException::accessDenied();
-        }
-
+        $accessToken = $this->findAccessTokenByToken($tokenId);
         return $accessToken->isRevoked();
     }
 }

@@ -13,6 +13,9 @@ $cacheConfig = [
 ];
 
 $aggregator = new ConfigAggregator([
+    \Zend\Expressive\Authentication\ConfigProvider::class,
+    \Zend\Expressive\Session\Ext\ConfigProvider::class,
+    \Zend\Expressive\Session\ConfigProvider::class,
     \Zend\ProblemDetails\ConfigProvider::class,
     \WShafer\PSR11MonoLog\ConfigProvider::class,
     \WShafer\PSR11FlySystem\ConfigProvider::class,
@@ -25,10 +28,12 @@ $aggregator = new ConfigAggregator([
     \Zend\Expressive\ConfigProvider::class,
     \Zend\Expressive\Router\ConfigProvider::class,
     // Default App module config
-    App\ConfigProvider::class,
+    \App\ConfigProvider::class,
     \Cache\ConfigProvider::class,
     \Database\ConfigProvider::class,
     \OAuth\ConfigProvider::class,
+    \Authentication\ConfigProvider::class,
+
     // Load application config in a pre-defined order in such a way that local settings
     // overwrite global settings. (Loaded as first to last):
     //   - `global.php`

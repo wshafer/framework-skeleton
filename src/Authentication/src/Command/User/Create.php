@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace OAuth\Command\User;
+namespace Authentication\Command\User;
 
 use OAuth\Exception\InvalidEmailAddress;
 use OAuth\Exception\UserExistsException;
@@ -19,7 +19,7 @@ class Create extends AbstractUserCommand
     protected function configure()
     {
         $this
-            ->setName('oauth:user:create')
+            ->setName('authentication:user:create')
             ->setDescription('Create a new user')
             ->addArgument(
                 'email',

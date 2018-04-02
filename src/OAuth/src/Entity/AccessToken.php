@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OAuth\Entity;
 
+use Authentication\Entity\User;
 use Database\Entity\TimestampableTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -61,9 +62,9 @@ class AccessToken implements AccessTokenEntityInterface
     protected $revoked = false;
 
     /**
-     * @var UserEntityInterface
+     * @var User
      *
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="accessToken")
+     * @ORM\ManyToOne(targetEntity="\Authentication\Entity\User", inversedBy="accessTokens")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="cascade")
      */
     protected $user;
@@ -71,7 +72,7 @@ class AccessToken implements AccessTokenEntityInterface
     /**
      * @var ClientEntityInterface
      *
-     * @ORM\ManyToOne(targetEntity="Client", inversedBy="accessToken")
+     * @ORM\ManyToOne(targetEntity="Client", inversedBy="accessTokens")
      * @ORM\JoinColumn(name="client_id", referencedColumnName="id", onDelete="cascade")
      */
     protected $client;

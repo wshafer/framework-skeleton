@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace OAuth\Command;
 
+use Authentication\Entity\User;
 use OAuth\Config\Config;
 use OAuth\Entity\Client;
-use OAuth\Entity\User;
 use OAuth\Repository\ScopeRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;

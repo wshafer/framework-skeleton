@@ -6,7 +6,6 @@ namespace OAuth\Grant;
 
 use Doctrine\ORM\EntityManagerInterface;
 use League\OAuth2\Server\Grant\AuthCodeGrant;
-use League\OAuth2\Server\Grant\PasswordGrant;
 use OAuth\Config\Config;
 use OAuth\Entity\AuthCode;
 use OAuth\Entity\RefreshToken;
