@@ -32,7 +32,7 @@ $aggregator = new ConfigAggregator([
     \Cache\ConfigProvider::class,
     \Database\ConfigProvider::class,
     \OAuth\ConfigProvider::class,
-    \Authentication\ConfigProvider::class,
+    \Identity\ConfigProvider::class,
 
     // Load application config in a pre-defined order in such a way that local settings
     // overwrite global settings. (Loaded as first to last):

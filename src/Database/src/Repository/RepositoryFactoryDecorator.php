@@ -2,42 +2,35 @@
 
 namespace Database\Repository;
 
+use Database\Event\FetchRepositoryEvent;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Repository\RepositoryFactory as RepositoryFactoryInterface;
-use Psr\Container\ContainerInterface;
+use Doctrine\ORM\Repository\RepositoryFactory;
 
 class RepositoryFactoryDecorator implements RepositoryFactoryInterface
 {
     protected $originalRepositoryFactory;
 
-    protected $container;
-
-    protected $config;
-
-    public function __construct(
-        RepositoryFactoryInterface $realRepositoryFactory,
-        ContainerInterface $container,
-        array $config
-    ) {
-        $this->originalRepositoryFactory = $realRepositoryFactory;
-        $this->container = $container;
-        $this->config = $config;
+    public function __construct(RepositoryFactory $repositoryFactory)
+    {
+        $this->originalRepositoryFactory = $repositoryFactory;
     }
 
     public function getRepository(EntityManagerInterface $entityManager, $entityName)
     {
+        /** @var EntityRepository $repository */
         $repository = $this->originalRepositoryFactory->getRepository(
             $entityManager,
             $entityName
         );
 
-        if ($repository instanceof ConfigAwareInterface) {
-            $repository->setConfig($this->config);
-        }
+        $eventManager = $entityManager->getEventManager();
 
-        if ($repository instanceof ContainerAwareInterface) {
-            $repository->setContainer($this->container);
-        }
+        $event = new FetchRepositoryEvent();
+        $event->setRepository($repository);
+
+        $eventManager->dispatchEvent(FetchRepositoryEvent::EVENT_NAME, $event);
 
         return $repository;
     }

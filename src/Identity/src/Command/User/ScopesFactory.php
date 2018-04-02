@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Authentication\Command\User;
+namespace Identity\Command\User;
 
-use Authentication\Entity\User;
-use Authentication\Repository\UserRepository;
+use Identity\Entity\User;
+use Identity\Repository\UserRepository;
 use Doctrine\ORM\EntityManager;
 use Interop\Container\ContainerInterface;
 use OAuth\Config\Config;

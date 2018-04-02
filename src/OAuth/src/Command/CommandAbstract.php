@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace OAuth\Command;
 
-use Authentication\Entity\User;
+use Identity\Entity\User;
 use OAuth\Config\Config;
 use OAuth\Entity\Client;
 use OAuth\Repository\ScopeRepository;

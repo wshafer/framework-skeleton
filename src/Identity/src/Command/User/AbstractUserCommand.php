@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Authentication\Command\User;
+namespace Identity\Command\User;
 
-use Authentication\Entity\User;
-use Authentication\Repository\UserRepository;
+use Identity\Entity\User;
+use Identity\Repository\UserRepository;
 use OAuth\Command\CommandAbstract;
 use OAuth\Config\Config;
 use OAuth\Repository\ScopeRepository;

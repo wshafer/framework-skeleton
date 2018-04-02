@@ -50,7 +50,7 @@ class Scope implements ScopeEntityInterface
     /**
      * @var UserEntityInterface[]|ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="\Authentication\Entity\User", mappedBy="scopes")
+     * @ORM\ManyToMany(targetEntity="\Identity\Entity\User", mappedBy="scopes")
      */
     protected $users;
 

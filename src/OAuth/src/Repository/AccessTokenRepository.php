@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace OAuth\Repository;
 
-use Authentication\Entity\User;
+use Identity\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;

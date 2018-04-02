@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Authentication\Command\User;
+namespace Identity\Command\User;
 
-use Authentication\Repository\UserRepository;
+use Identity\Repository\UserRepository;
 use Doctrine\ORM\EntityManager;
 use OAuth\Config\Config;
 use OAuth\Repository\ScopeRepository;
@@ -12,7 +12,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Scopes extends AbstractUserCommand
+class Delete extends AbstractUserCommand
 {
     protected $entityManager;
 
@@ -26,18 +26,19 @@ class Scopes extends AbstractUserCommand
         parent::__construct($userRepository, $scopeRepository, $config);
     }
 
+
     /**
      * Configures the command
      */
     protected function configure()
     {
         $this
-            ->setName('authentication:user:scopes')
-            ->setDescription('Add/Remove scopes to an existing user')
+            ->setName('identity:user:delete')
+            ->setDescription('Delete an existing user')
             ->addArgument(
                 'email',
                 InputArgument::REQUIRED,
-                'email address'
+                'user email address'
             );
     }
 
@@ -47,16 +48,8 @@ class Scopes extends AbstractUserCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $user = $this->getUser($input);
-        $allowedScopes = $this->getScopes($input, $output, $user);
-
-        $scopes = [];
-
-        foreach ($allowedScopes as $allowedScope) {
-            $scopes[] = $this->scopeRepository->findOneByName($allowedScope);
-        }
-
-        $user->setScopes($scopes);
-        $this->entityManager->flush($user);
+        $this->entityManager->remove($user);
+        $this->entityManager->flush();
         $output->writeln('Complete');
     }
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Authentication\Entity;
+namespace Identity\Entity;
 
 use Database\Entity\TimestampableTrait;
 use Doctrine\ORM\Mapping as ORM;
@@ -20,7 +20,7 @@ use OAuth\Entity\Scope;
  *     indexes={@ORM\Index(name="idx1_users", columns={"email"})},
  *     uniqueConstraints={@ORM\UniqueConstraint(name="unique_user_email", columns={"email"})}
  * )
- * @ORM\Entity(repositoryClass="Authentication\Repository\UserRepository")
+ * @ORM\Entity(repositoryClass="Identity\Repository\UserRepository")
  */
 class User implements UserEntityInterface
 {

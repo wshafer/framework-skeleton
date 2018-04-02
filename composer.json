@@ -41,6 +41,7 @@
         "php": "^7.1",
         "dasprid/container-interop-doctrine": "^1.1",
         "gedmo/doctrine-extensions": "^2.4",
+        "league/oauth2-server": "^7.0",
         "roave/security-advisories": "dev-master",
         "symfony/routing": "dev-master",
         "wshafer/expressive-symfony-router": "dev-master",
@@ -51,7 +52,6 @@
         "zendframework/zend-component-installer": "^2.1",
         "zendframework/zend-config-aggregator": "^1.0",
         "zendframework/zend-expressive": "^3.0.0",
-        "zendframework/zend-expressive-authentication-oauth2": "dev-master",
         "zendframework/zend-expressive-helpers": "^5.0.0",
         "zendframework/zend-expressive-session-ext": "^1.0",
         "zendframework/zend-problem-details": "^1.0",
@@ -70,7 +70,7 @@
             "Database\\": "src/Database/src/",
             "Cache\\": "src/Cache/src/",
             "OAuth\\": "src/OAuth/src/",
-            "Authentication\\": "src/Authentication/src/"
+            "Identity\\": "src/Identity/src/"
         }
     },
     "autoload-dev": {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace OAuth\Entity;
 
-use Authentication\Entity\User;
+use Identity\Entity\User;
 use Database\Entity\TimestampableTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -69,7 +69,7 @@ class AuthCode implements AuthCodeEntityInterface
     /**
      * @var User
      *
-     * @ORM\ManyToOne(targetEntity="\Authentication\Entity\User", inversedBy="authCode")
+     * @ORM\ManyToOne(targetEntity="\Identity\Entity\User", inversedBy="authCode")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="cascade")
      */
     protected $user;

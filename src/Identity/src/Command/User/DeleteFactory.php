@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Authentication\Command\User;
+namespace Identity\Command\User;
 
-use Authentication\Entity\User;
-use Authentication\Repository\UserRepository;
+use Identity\Entity\User;
+use Identity\Repository\UserRepository;
 use Doctrine\ORM\EntityManager;
 use Interop\Container\ContainerInterface;
 use OAuth\Config\Config;
 use OAuth\Entity\Scope;
 use OAuth\Repository\ScopeRepository;
 
-class ModifyFactory
+class DeleteFactory
 {
     public function __invoke(ContainerInterface $container)
     {
@@ -28,6 +28,6 @@ class ModifyFactory
         /** @var Config $config */
         $config = $container->get(Config::class);
 
-        return new Modify($entityManager, $userRepository, $scopeRepo, $config);
+        return new Delete($entityManager, $userRepository, $scopeRepo, $config);
     }
 }

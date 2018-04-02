@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace OAuth\Grant;
 
-use Authentication\Entity\User;
-use Authentication\Repository\UserRepository;
+use Identity\Entity\User;
+use Identity\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use League\OAuth2\Server\Grant\PasswordGrant;
 use OAuth\Config\Config;

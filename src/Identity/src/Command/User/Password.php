@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Authentication\Command\User;
+namespace Identity\Command\User;
 
-use Authentication\Repository\UserRepository;
+use Identity\Repository\UserRepository;
 use Doctrine\ORM\EntityManager;
 use OAuth\Config\Config;
 use OAuth\Repository\ScopeRepository;
@@ -33,7 +33,7 @@ class Password extends AbstractUserCommand
     protected function configure()
     {
         $this
-            ->setName('authentication:user:password')
+            ->setName('identity:user:password')
             ->setDescription('Change user password')
             ->addArgument(
                 'email',

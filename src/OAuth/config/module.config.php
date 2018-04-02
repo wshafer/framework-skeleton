@@ -39,6 +39,8 @@ return [
                 => \OAuth\Middleware\OAuth2Factory::class,
             \OAuth\Middleware\Authentication::class
                 => \OAuth\Middleware\AuthenticationFactory::class,
+            \OAuth\EventListener\OAuthEventSubscriber::class
+                => \OAuth\EventListener\OAuthEventSubscriberFactory::class,
 
 
             \OAuth\Config\Config::class
@@ -90,6 +92,15 @@ return [
         'driver' => [
             'orm_default' => [
                 'paths'     => [__DIR__ . '/../src/Entity'],
+            ],
+        ],
+
+        'event_manager' => [
+            'orm_default' => [
+                'subscribers' => [
+                    \OAuth\EventListener\OAuthEventSubscriber::class
+                        => \OAuth\EventListener\OAuthEventSubscriber::class,
+                ],
             ],
         ],
     ],

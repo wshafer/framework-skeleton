@@ -9,19 +9,19 @@ use Psr\Container\ContainerInterface;
 
 trait ConfigTrait
 {
-    /** @var ContainerInterface */
-    protected $container;
+    /** @var Config */
+    protected $config;
 
     /**
      * @return Config
      */
-    public function getConfig()
+    public function getConfig() : Config
     {
-        return $this->container->get(Config::class);
+        return $this->config;
     }
 
-    public function setContainer(ContainerInterface $container): void
+    public function setConfig(Config $config): void
     {
-        $this->container = $container;
+        $this->config = $config;
     }
 }

@@ -10,10 +10,11 @@ use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 use OAuth\Entity\Client;
 use OAuth\Entity\Scope;
+use OAuth\EventListener\ConfigAwareInterface;
 use OAuth\Exception\ClientExistsException;
 use OAuth\Exception\ClientNotFoundException;
 
-class ClientRepository extends EntityRepository implements ClientRepositoryInterface, ContainerAwareInterface
+class ClientRepository extends EntityRepository implements ClientRepositoryInterface, ConfigAwareInterface
 {
     use ConfigTrait;
 

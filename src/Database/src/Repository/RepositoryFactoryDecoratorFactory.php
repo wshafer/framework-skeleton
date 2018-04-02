@@ -9,14 +9,7 @@ class RepositoryFactoryDecoratorFactory
 {
     public function __invoke(ContainerInterface $container)
     {
-        $config = $container->get('config');
-
         $repositoryFactory = new DefaultRepositoryFactory();
-
-        return new RepositoryFactoryDecorator(
-            $repositoryFactory,
-            $container,
-            $config
-        );
+        return new RepositoryFactoryDecorator($repositoryFactory);
     }
 }

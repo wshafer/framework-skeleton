@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Authentication\Command\User;
+namespace Identity\Command\User;
 
-use Authentication\Repository\UserRepository;
+use Identity\Repository\UserRepository;
 use Doctrine\ORM\EntityManager;
 use OAuth\Config\Config;
 use OAuth\Exception\InvalidEmailAddress;
@@ -36,7 +36,7 @@ class Modify extends AbstractUserCommand
     protected function configure()
     {
         $this
-            ->setName('authentication:user:modify')
+            ->setName('identity:user:modify')
             ->setDescription('Modify an existing users email address')
             ->addArgument(
                 'email',
